@@ -22,6 +22,18 @@
             width:30px;
             height:30px;
         }
+
+        tbody>tr:nth-child(-n+6)
+        {
+            background-color:green !important;
+            color:white;
+        }
+        
+        tbody>tr:nth-child(n+17)
+        {
+            background-color:red !important;
+            color:white;
+        }
     </style>
 </head>
 
@@ -53,7 +65,7 @@
         <br>       
         <div class="row">
             <button type="button" @click="fimDeJogo" class="btn btn-primary">Fim de Jogo</button>
-        </div>        
+        </div>                
         <table class="table">
             <thead>
                 <tr>
@@ -75,10 +87,25 @@
                     </td>
                     <td>{{time.gm}}</td>
                     <td>{{time.gs}}</td>
+                    <td>{{time | saldo}}</td>
                     <td></td>
                 </tr>
             </tbody>
         </table>        
+        <h3>Classificação libertadores</h3>
+        <ul>
+            <li v-for="time in timesLibertadores">
+                <img :src="time.escudo" alt="Escudo" class="escudo">
+                {{time.nome}}
+            </li>
+        </ul>
+        <h3>Zona de Reibaxamento</h3>
+        <ul>
+            <li v-for="time in timeZonaRebaixamento">
+                <img :src="time.escudo" alt="Escudo" class="escudo">
+                {{time.nome}}
+            </li>
+        </ul>
     </div>
 
 
@@ -146,8 +173,17 @@
         }
         const app = new Vue({
             el: "#app",
+            computed:{
+                timesLibertadores(){
+                    return this.times.slice(0,6);
+                },
+                timeZonaRebaixamento(){
+                    return this.times.slice(16,20)
+                }
+            },
             data: {                
                 gols:3,
+                busca:'',
                 novoJogo:{
                     casa:{
                         time:null,
@@ -225,12 +261,14 @@
                         }else{
                             return 1;
                         }                        
-                    });                    
-
-                    
-
+                    });                                        
                 }
                 
+            },
+            filters:{
+                saldo(time){
+                    return time.gm - time.gs
+                }
             }
         });
     </script>
